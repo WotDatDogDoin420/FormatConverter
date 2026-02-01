@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Excel Konvertor";
+}
+
+<h2 class="text-primary">Excel Konvertor</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">@ViewBag.Message</div>
+}
+
+
+<form asp-action="UploadFile" method="post" enctype="multipart/form-data" class="mt-3 p-3 border rounded bg-light">
+    <div class="mb-3">
+        <label class="form-label fw-bold">Vyberte Excel soubor:</label>
+        <input type="file" name="File" class="form-control" required accept=".xlsx" />
+    </div>
+    <input type="hidden" name="OutputFormat" id="outputFormat" value="json" />
+    <div class="mb-3">
+
+        <button type="button" class="btn btn-primary" id="jsonBtn" onclick="selectFormat('json')">
+            Převést do JSON
+        </button>
+        <button type="button" class="btn btn-primary" id="xmlBtn" onclick="selectFormat('xml')">
+            Převést do XML
+        </button>
+
+        <button type="submit" class="btn btn-primary mt-2 w-100" id="convertBtn">
+            Spustit konverzi
+        </button>
+    </div>
+</form>
+
+@if (ViewBag.OutputFilePath != null)
+{
+    <hr />
+    <h3>Stažení souboru</h3>
+    
+        var fileName = ViewBag.OutputFilePath as string;
+        var isXml = fileName?.EndsWith(".xml", StringComparison.OrdinalIgnoreCase) ?? false;
+    
+    <a href="@Url.Action("DownloadFile", "Home", new { fileName = ViewBag.OutputFilePath })" class="btn btn-success">
+        Stáhnout @(isXml ? "XML" : "JSON")
+    </a>
+}
+
+<script src="~/js/site.js">
+</script>
